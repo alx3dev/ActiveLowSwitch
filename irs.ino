@@ -29,23 +29,29 @@ struct Sensor {
   unsigned long timer = 0UL;
   unsigned long triggered = 0UL;
 
+
   bool isOff(const byte& pin = RLP,
              const byte& mode = RELAY_ON) {
 
     if (digitalRead(pin) != mode)
       return true;
+
+    return false;
   }
 
-  void turn_switch(const byte& state) {
+
+  void turn_switch(const byte& state = ON,
+                   const byte& myPin = RLP,
+                   const byte& myModeOn = RELAY_ON) {
 
     if (state == 1) {
-      digitalWrite(RLP, RELAY_ON);
+      digitalWrite(myPin, myModeOn);
 
       detected = true;
       triggered = millis();
     }
     else {
-      digitalWrite(RLP, !RELAY_ON);
+      digitalWrite(myPin, !myModeOn);
       detected = false;  
     }
   }
