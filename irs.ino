@@ -58,7 +58,7 @@ struct Sensor {
 };  // Sensor
 
 
-struct Sensor ir;
+Sensor ir;
 
 ICACHE_RAM_ATTR void switch_relay() {
   if (ir.isOff()) {
