@@ -1,14 +1,12 @@
 /*
-  Switching light ON/OFF with infrared sensor and ESP8266
+  Switching light ON/OFF with infrared sensor and ESP8266 (esp-01)
 
-    For ESP-01 use next setup
+    GPIO_0 -> external_pull-up -> mechanical relay
+    GPIO_2 -> infrared sensor
 
-      GPIO_0 -> 10К pull-up -> mechanical relay (active low)
-      GPIO_2 -> infrared sensor
-
-    To use TX/RX pins of esp-01 for I2C display:
-      pinMode(1, FUNCTION_3);
-      pinMode(3, FUNCTION_3);
+  To use TX/RX pins of esp-01:
+    pinMode(1, FUNCTION_3);
+    pinMode(3, FUNCTION_3);
 */
 
 #define ON  1
@@ -32,11 +30,10 @@ struct Sensor {
   unsigned long triggered = 0UL;
 
   bool isOff(const byte& pin = RLP,
-             const byte& modeOn = RELAY_ON)
-    {
-      if (digitalRead(pin) != modeOn);
-        return true;
-    }
+             const byte& mode = RELAY_ON) {
+
+    if (digitalRead(pin) != mode)
+      return true;
   }
 
   void turn_switch(const byte& state) {
@@ -86,3 +83,5 @@ void loop() {
     }
   }
 }
+
+
