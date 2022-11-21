@@ -33,9 +33,7 @@ struct Sensor {
   bool isOff(const byte& pin = RLP,
              const byte& mode = RELAY_ON) {
 
-    if (digitalRead(pin) != mode)
-      return true;
-
+    if (digitalRead(pin) != mode) { return true; }
     return false;
   }
 

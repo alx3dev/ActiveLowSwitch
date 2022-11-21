@@ -2,7 +2,7 @@
 
 Sensor ir;
 
-ICACHE_RAM_ATTR void switch_relay() {
+IRAM_ATTR void switch_relay() {
 
   if (ir.isOff()) { ir.turn_switch(ON); }
 
@@ -20,9 +20,9 @@ void setup() {
 
 void loop() {
 
-  if (ir.autoOff) {
+  if (ir.autoOff && ir.detected) {
 
     ir.timer = millis();
-    if (ir.timer - ir.triggered > AUTO_OFF); ir.turn_switch(OFF);
+    if (ir.timer - ir.triggered > AUTO_OFF) { ir.turn_switch(OFF); }
   }
 }
