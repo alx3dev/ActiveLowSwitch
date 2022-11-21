@@ -1,20 +1,19 @@
-# IRSwitch
-Switching AC light ON/OFF with Infrared sensor and ESP8266
+# ActiveLowSwitch
 
-This is a project-template for ESP8266 microcontrollers, including ESP-01. They are out-of-date, just because there are better in almost same price. But if you have a few spares, or you want to pay as less as possible while at the same time you don't need more than 4 pins, ESP-01 can do a lot. Otherwise, use any ESP8266 module.
+Library to control active-low switches with ESP8266 / ESP32 and ArduinoIDE / PlatformIO.
 
 ---
 
-# About
+# Example
 
 Infrared sensor is configured as input and attached as interrupt (when rising). It control another output pin with AC mechanical relay that is _"active-low",_ (in case of ESP-01 it goes on GPIO_0 with 10K pull-up resistor).  
 
-Relay goes OFF with another interrupt, or after some time if no signal received by IR sensor. Everything is structed, making it easy to add more switches and to use same code.
+Relay goes OFF with another interrupt, or after some time if no signal received by IR sensor. Everything is structed, making it easy to add more switches and to reuse same code.
 
 
-## Writing sketch with ArduinoIDE and ESP32
+## Writing sketch to ESP-01 with ESP32
 
-To write a sketch on ESP-01 from ESP32 over USB cable, you need to take care about few things:  
+To write a sketch on ESP-01 from ESP32 over USB cable, you need to take care about a few things:  
 
  - GPIO_0 on ESP-01 must be LOW before powering to enter boot mode
  - RST and CH on ESP-01 must be HIGH for chip to work
