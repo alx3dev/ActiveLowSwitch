@@ -1,24 +1,33 @@
-#include "ActiveLowSwitch.h"
+//MIT License
+//Copyright (c) 2022 Alx3Dev
 
-#define IRP 2 // infrared sensor
+#include <Arduino.h>
+#include "../ActiveLowSwitch.h"
+
+
+byte irPin = 2; // infrared sensor
 
 byte switchPin = 0; // relay pin
 
-ActiveLowSwitch relay(switchPin, true);
+bool auto_off = true;
+
+unsigned long auto_off_time = 180000; // 3 min.
 
 
-IRAM_ATTR void monitor_relay() { relay.trigger(); }
+ActiveLowSwitch relay(switchPin, auto_off, auto_off_time);  // configure
+
+
+IRAM_ATTR void monitorIR() { relay.trigger(); }   // attach interrupt
 
 
 void setup() {
-  pinMode(IRP, INPUT);
+  pinMode(irPin, INPUT);
   pinMode(switchPin, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(IRP), monitor_relay, RISING);
+  attachInterrupt(digitalPinToInterrupt(IRP), monitorIR, RISING);
 }
 
 
 void loop() {
-  relay.autoOff();
+  relay.autoOFF();
 }
-
