@@ -1,8 +1,8 @@
 //MIT License
 //Copyright (c) 2022 Alx3Dev
 
-#include <Arduino.h>
-#include "../ActiveLowSwitch.h"
+//#include <Arduino.h>
+#include "ActiveLowSwitch.h"
 
 
 byte irPin = 2; // infrared sensor
@@ -24,7 +24,7 @@ void setup() {
   pinMode(irPin, INPUT);
   pinMode(switchPin, OUTPUT);
 
-  attachInterrupt(digitalPinToInterrupt(IRP), monitorIR, RISING);
+  attachInterrupt(digitalPinToInterrupt(irPin), monitorIR, RISING);
 }
 
 
