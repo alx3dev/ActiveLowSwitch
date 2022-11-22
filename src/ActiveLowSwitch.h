@@ -6,18 +6,14 @@ class ActiveLowSwitch {
   private:
 
     byte pin;
+    bool timer;
+    unsigned long pause;
 
     bool detected = false;
-
     unsigned long triggered = 0UL;
 
 
   public:
-
-    bool timer;
-
-    unsigned long pause;
-
 
     ActiveLowSwitch(const byte switch_pin, bool use_timer = false,
                     unsigned long pause_time = 180000)
@@ -30,7 +26,7 @@ class ActiveLowSwitch {
 
     bool isOFF() {
 
-      if (digitalRead(pin) == 1) { return true; }   // relay is active-low
+      if (digitalRead(pin) == 1) { return true; }   // active-low switch
       return false;
     }
 
@@ -65,4 +61,4 @@ class ActiveLowSwitch {
         if (atm - triggered > pause) { turn(OFF); }
       }
     }
-  };  // Sensor
+  };  // ActiveLowSwitch
