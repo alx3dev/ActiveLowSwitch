@@ -1,64 +1,65 @@
-/*
-  Switching light ON/OFF with infrared sensor and ESP8266 (esp-01)
-
-    GPIO_0 -> external_pull-up -> mechanical relay
-    GPIO_2 -> infrared sensor
-
-  To use TX/RX pins of esp-01:
-    pinMode(1, FUNCTION_3);
-    pinMode(3, FUNCTION_3);
-*/
-
-#define ON  1
+#define ON 1
 #define OFF 0
 
-struct ActiveLowSwitch {
+class ActiveLowSwitch {
 
-  bool useTimer = false;
-  bool detected = false;
+  public:
 
-  unsigned long offTimer = 180000;
+    byte pin;
 
-  unsigned long timer = 0UL;
-  unsigned long triggered = 0UL;
+    bool detected = false;
 
+    bool useTimer;
+    unsigned int offTimer;
 
-  bool isOff(byte& pin) {
-
-    if (digitalRead(pin) == 1) { return true; }   // relay is active-low
-    return false;
-  }
+    unsigned long timer = 0UL;
+    unsigned long triggered = 0UL;
 
 
-  void turn(const byte& state, byte& pin) {
-
-    if (state == 1) {
-      digitalWrite(pin, 0);
-
-      detected = true;
-      triggered = millis();
+    ActiveLowSwitch(byte switch_pin, bool use_timer = false,
+                    unsigned int pause_time = 180000)
+    {
+      pin = switch_pin;
+      useTimer = use_timer;
+      offTimer = pause_time;
     }
-    else {
-      digitalWrite(pin, 1);
-      detected = false;  
+
+
+    bool isOff() {
+
+      if (digitalRead(pin) == 1) { return true; }   // relay is active-low
+      return false;
     }
-  }
 
 
-  void trigger(byte& pin) {
+    void turn(const byte state) {
 
-    if (isOff(pin)) { turn(ON, pin); }
-    else { turn(OFF, pin); }
-  }
+      if (state == 1) {
+        digitalWrite(pin, 0);
 
-
-  void autoOff(byte& pin) {
-
-    if (useTimer && detected) {
-
-      timer = millis();
-      if (timer - triggered > offTimer) { turn(OFF, pin); }
+        detected = true;
+        triggered = millis();
+     }
+      else {
+        digitalWrite(pin, 1);
+        detected = false;  
+     }
     }
-  }
 
-};  // Sensor
+
+    void trigger() {
+
+      if (isOff()) { turn(ON); }
+      else { turn(OFF); }
+    }
+
+
+    void autoOff() {
+
+      if (useTimer && detected) {
+
+        timer = millis();
+        if (timer - triggered > offTimer) { turn(OFF); }
+      }
+    }
+  };  // Sensor
