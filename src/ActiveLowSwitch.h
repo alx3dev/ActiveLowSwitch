@@ -14,8 +14,9 @@ class ActiveLowSwitch {
     uint32_t offTime;
     uint32_t triggered = 0UL;
 
-    ActiveLowSwitch(const byte switch_pin, bool pulsing = false,
-                    bool use_timer = false, uint32_t off_time = 300000)
+    ActiveLowSwitch(const byte switch_pin,
+                    const bool use_timer = false,
+                    const uint32_t off_time = 300000)
     {
       pin = switch_pin;
       useTimer = use_timer;
