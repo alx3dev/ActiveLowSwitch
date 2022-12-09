@@ -6,33 +6,29 @@ class ActiveLowSwitch {
   private:
 
     byte pin;
-    bool timer;
-    unsigned long pause;
-
     bool detected = false;
-    unsigned long triggered = 0UL;
-
 
   public:
 
-    ActiveLowSwitch(const byte switch_pin, bool use_timer = false,
-                    unsigned long pause_time = 180000)
+    bool useTimer;
+    uint32_t offTime;
+    uint32_t triggered = 0UL;
+
+    ActiveLowSwitch(const byte switch_pin, bool pulsing = false,
+                    bool use_timer = false, uint32_t off_time = 300000)
     {
       pin = switch_pin;
-      timer = use_timer;
-      pause = pause_time;
-    }
+      useTimer = use_timer;
+      offTime = off_time;
 
+      pinMode(pin, OUTPUT);
+    }
 
     bool isOFF() {
-
-      if (digitalRead(pin) == 1) { return true; }   // active-low switch
-      return false;
+      return digitalRead(pin) == 1;   // active-low switch
     }
 
-
     void turn(const byte state) {
-
       if (state == 1) {
         digitalWrite(pin, 0);
 
@@ -45,20 +41,17 @@ class ActiveLowSwitch {
       }
     }
 
-
     void trigger() {
-
-      if (isOFF()) { turn(ON); }
-      else { turn(OFF); }
+      isOFF() ? turn(ON) : turn(OFF);
     }
 
-
     void autoOFF() {
+      if (useTimer && detected) {
+        uint32_t atm = millis();
 
-      if (timer && detected) {
-        unsigned long atm = millis();
-
-        if (atm - triggered > pause) { turn(OFF); }
+        if (atm - triggered >= offTime)  {
+          turn(OFF);
+        }
       }
     }
   };  // ActiveLowSwitch
